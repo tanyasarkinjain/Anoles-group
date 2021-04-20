@@ -16,6 +16,11 @@ The main code is in [Anoles_counting_scales.ipynb](https://github.com/tanyasarki
 - numpy
 - matplotlib
 - opencv2
+- os
+- pandas
+- image_slicer
+- statistics
+- datascience
 
 ## Methods
 
