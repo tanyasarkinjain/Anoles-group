@@ -44,7 +44,7 @@ Does the same as split_count_select but does not split images and therefore does
 <img width="1200" alt="Screenshot 2021-04-19 at 4 48 56 PM" src="https://user-images.githubusercontent.com/67300971/115317476-7cd88980-a130-11eb-86ef-a73bf6bf27ec.png">
 _____________________________________________________________________________________________________________________________________________
 
-### Examples:
+### Examples (using run_count_on_directory):
 
 <img width="1215" alt="Screenshot 2021-04-16 at 12 49 11 AM" src="https://user-images.githubusercontent.com/67300971/115317636-d771e580-a130-11eb-8610-e8988420bc41.png">
 
