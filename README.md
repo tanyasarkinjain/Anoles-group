@@ -10,7 +10,7 @@ The main code is in [Anoles_counting_scales.ipynb](https://github.com/tanyasarki
 - Works best for scale and colonies that contrast their background/medium and are paler than the background
 - Works best for scales with overall uniform color
 - It is okay if there is uneven lighting in someplaces (as long as no flash)
-- Example Image Sets: [Anolis-cristatellus-Imgs](https://github.com/tanyasarkinjain/Anoles-group/tree/master/Anolis_cristatellus_images)    [Anolis-Guanica-County-Imgs](https://github.com/tanyasarkinjain/Anoles-group/tree/master/Anolis_cristatellus_images)   [Imgs-Result-From-Split](https://github.com/tanyasarkinjain/Anoles-group/tree/master/unsplit_images)
+- Example Image Sets: [Anolis-cristatellus-Imgs](https://github.com/tanyasarkinjain/Anoles-group/tree/master/Anolis_cristatellus_images)    [Anolis-Guanica-County-Imgs](https://github.com/tanyasarkinjain/Anoles-group/tree/master/Anolis_cristatellus_images)   [Imgs-Result-From-Split](https://github.com/tanyasarkinjain/Anoles-group/blob/master/small/small2_01_02.png)
 
 ## Methods
 
