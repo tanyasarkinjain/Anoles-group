@@ -7,8 +7,8 @@ that can handle for these cases. This should save time and tedium in laboratory 
 ## Image Requirements
 - Works best for scales and colonies that are not overlapping
 - Works best for images taken **without** flash
-- Works best for scale and colonies that contrast their background/medium
-- It is okay if uneven lighting in someplaces (as long as no flash)
+- Works best for scale and colonies that contrast their background/medium and are paler than the background
+- It is okay if there is uneven lighting in someplaces (as long as no flash)
 - Example Image Sets: [Anoles-Scales](https://github.com/tanyasarkinjain/Anoles-group/tree/master/Anolis_cristatellus_images)
 
 ## Methods
