@@ -1,11 +1,11 @@
 # Anoles-group
 
 Anoles-group (probably changing the name) allows users to count scales easily. The script has methods that can estimate the scales in a large area where 
-scales are overall uniform but in some places difficult to count by hand. It can also count the total scales in smaller good quality images. There are two different methodsthat can handle for these cases. This should save time and tedium in laboratory settings, providing even results. 
+scales are overall uniform but in some places difficult to count by hand. It can also count the total scales in smaller good quality images. There are two different methods that can handle for these cases. This should save time and tedium in laboratory settings, providing even results. 
 The main code is in [Anoles_counting_scales.ipynb](https://github.com/tanyasarkinjain/Anoles-group/blob/master/Anoles_counting_scales.ipynb)
 
 ## Image Requirements
-- Works best for scales and colonies that are not overlapping
+- Works best for scales and colonies that are not overlapping and instead are distinct
 - Works best for images taken **without** flash
 - Works best for scale and colonies that contrast their background/medium and are paler than the background
 - Works best for scales with overall uniform color
