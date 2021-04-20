@@ -9,6 +9,7 @@ that can handle for these cases. This should save time and tedium in laboratory 
 - Works best for images taken **without** flash
 - Works best for scale and colonies that contrast their background/medium
 - It is okay if uneven lighting in someplaces (as long as no flash)
+- Example Image Sets
 
 ## Methods
 
