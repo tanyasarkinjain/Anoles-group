@@ -1,6 +1,6 @@
 # Anoles-group
 
-Anoles-group allows users to count scales (or bacteria colonies) easily. The script has methods that can estimate the scalesc/colonies in a large area where 
+Anoles-group (probably changing the name) allows users to count scales (or bacteria colonies) easily. The script has methods that can estimate the scalesc/colonies in a large area where 
 spots are uniform but in some places difficult to count by hand. It can also count the total scales in smaller good quality images. There are two different methods 
 that can handle for these cases. This should save time and tedium in laboratory settings, providing even results. 
 
