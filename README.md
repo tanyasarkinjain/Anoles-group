@@ -48,5 +48,5 @@ ________________________________________________________________________________
 
 <img width="1215" alt="Screenshot 2021-04-16 at 12 49 11 AM" src="https://user-images.githubusercontent.com/67300971/115317636-d771e580-a130-11eb-8610-e8988420bc41.png">
 
-<img width="739" alt="Screenshot 2021-04-16 at 12 48 31 AM" src="https://user-images.githubusercontent.com/67300971/115346260-cfcc3400-a164-11eb-88c6-505d951f1f74.png">
+<img width="1215" alt="Screenshot 2021-04-16 at 12 48 31 AM" src="https://user-images.githubusercontent.com/67300971/115346260-cfcc3400-a164-11eb-88c6-505d951f1f74.png">
 
