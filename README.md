@@ -8,8 +8,9 @@ that can handle for these cases. This should save time and tedium in laboratory 
 - Works best for scales and colonies that are not overlapping
 - Works best for images taken **without** flash
 - Works best for scale and colonies that contrast their background/medium and are paler than the background
+- Works best for scales with overall uniform color
 - It is okay if there is uneven lighting in someplaces (as long as no flash)
-- Example Image Sets: [Anolis_cristatellus](https://github.com/tanyasarkinjain/Anoles-group/tree/master/Anolis_cristatellus_images) [Anolis Guanica-County](https://github.com/tanyasarkinjain/Anoles-group/tree/master/Anolis_cristatellus_images)
+- Example Image Sets: [Anolis_cristatellus Imgs](https://github.com/tanyasarkinjain/Anoles-group/tree/master/Anolis_cristatellus_images) [Anolis Guanica-County Imgs](https://github.com/tanyasarkinjain/Anoles-group/tree/master/Anolis_cristatellus_images) [Large Lizard Scale Imgs] (https://github.com/tanyasarkinjain/Anoles-group/tree/master/google_images)
 
 ## Methods
 
