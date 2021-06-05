@@ -38,9 +38,7 @@ import matplotlib.pyplot as plt
 from IPython.display import display
 #set_matplotlib_formats('retina')
 import pandas
-import statistics
 import image_slicer
-from scipy.spatial.distance import pdist as pdist
 from matplotlib.backends.backend_pdf import PdfPages
 import matplotlib.axes
 
