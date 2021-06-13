@@ -5,10 +5,13 @@
 # 4.display results
 
 # TODO
-# Fix spacing when images are displayed
-# Don't display the inverted image? Currently leaving a gap when there isn't one
-# Saved files should have different names each time
-# For split_count_select: display the estimated total count somewhere?
+# pdf and csv files should have unique filenames each time so previous files are not overwritten
+# currently displays warning message about clipping input data - this is because the overlay image is some weird format.
+#### I tried fixing this by converting overlay image to np.uint8, and this got rid of the warning message but added weird colored speckles to the overlay image
+# For split_count_select:
+#### Currently adds created subimages to the folder with original images -> need to fix this
+#### Test whether estimated total count is accurate and display the estimated total count somewhere?
+#### Fix titles at the top of the two pdfs outputted by split_count_select
 
 # Explanation of split_count_select()
 # Splits a large image into subimages of equal size (have to give it a number of subimages to split into).
@@ -119,7 +122,7 @@ def count_scales_directory(dirname):
         img_filepath = dirname + '/' + img.name
         results, data = count_scales(img_filepath)
         results_list.append(results)
-    display_results(results_list)
+    display_results(results_list, dirname)
     return results_list
 
 def split_count_select(img_path, num_subimages, num_to_keep):
@@ -161,6 +164,7 @@ def split_count_select(img_path, num_subimages, num_to_keep):
     
     with PdfPages(r'selected_subimages.pdf') as export_pdf:
         fig = plt.figure(figsize=(8.5, 11))
+        fig.suptitle('Selected Subimages from ' + img_path, fontsize=14, fontweight='bold')
         for i in np.arange(num_to_keep):
             plt.subplot(1,num_to_keep,i+1), plt.imshow(all_labeled[best_indices_lst[i]], 'gray')
             plt.title("Chosen Image: " + str(best_indices_lst[i]), fontsize=5)
@@ -169,7 +173,7 @@ def split_count_select(img_path, num_subimages, num_to_keep):
     
     return results_list, best_indices_lst, estimated_total
 
-def display_results(results_list):
+def display_results(results_list, dirname=None):
     '''Displays original image, inverted image (if applicable), thresholded image with noise,
     noise-removed image with scales labeled, and overlaid image.
     Displayed images are saved to a pdf file, and a table with image names and counts are saved to a csv file.
@@ -178,46 +182,52 @@ def display_results(results_list):
         '''
     if not isinstance(results_list, list):
         results_list = [results_list]
-    num_rows = len(results_list)
     index = 1
-    num_plots = 0
+    page_row_count = 0
+    total_row_count = 0
 
     # Display images in a pdf
     with PdfPages(r'scale_count_images.pdf') as export_pdf:
         fig = plt.figure(figsize=(8.5, 11))
-        row = 0
+        title = 'Scale Counts'
+        if dirname:
+            title += (' for ' + dirname)
+        fig.suptitle(title, fontsize=14, fontweight='bold')
         for results_dict in results_list:
             count = results_dict['count']
+            img_name = results_dict['img_name']
+            # wrap image name if very long
+            if len(img_name) > 20:
+                lines = [img_name[i:i+20] for i in range(0, len(img_name), 20)]
+                img_name = '\n'.join(lines)
             images = [results_dict['original'], results_dict['with_noise'], results_dict['labeled_img']]
-            titles = [results_dict['img_name'], 'With Noise', 'Noise-Removed']
+            titles = [img_name, 'With Noise', 'Noise-Removed']
             if 'inverted' in results_dict:
                 images.insert(1, results_dict['inverted'])
                 titles.insert(1, 'Inverted')
-            num_cols = len(images) + 2 # extra col for overlay and another for inverted
-            for x in range(num_cols - 2):
-                plt.subplot(num_rows,num_cols,index), plt.imshow(images[x], 'gray')
-                plt.tight_layout(pad=100, h_pad=100)
+            for x in range(len(images)):
+                plt.subplot(5,5,index), plt.imshow(images[x], 'gray')
                 plt.title(titles[x], fontsize=7)
                 index += 1
-            # display overlaid image
-            plt.subplot(num_rows,num_cols,index), plt.imshow(_overlay(results_dict['original'], results_dict['labeled_img']))
+            # display overlay image
+            overlay_img = _overlay(results_dict['original'], results_dict['labeled_img'])
+            plt.subplot(5,5,index), plt.imshow(overlay_img)
             plt.title('Overlay, Count = ' + str(count), fontsize=7)
             index += 1
-            num_plots += 1
-            # if no inverted image, skip over that column
-            if 'inverted' not in results_dict:
+            if 'inverted' not in results_dict: # if not inverted, skip over last col
                 index += 1
-            if num_plots % 5 == 0:
+            page_row_count += 1
+            total_row_count += 1
+            # start new page after every 5 rows
+            if page_row_count % 5 == 0 and total_row_count < len(results_list):
                 for ax in fig.axes:
                     ax.axis("off")
                 export_pdf.savefig()
                 plt.close()
                 fig = plt.figure(figsize=(8.5, 11))
-                fig.tight_layout(pad=100, h_pad=100)
-            row += 1
+                index = 1
         for ax in fig.axes:
             ax.axis("off")
-        #fig.tight_layout(pad=10, h_pad=10) - this doesn't seem to work
         export_pdf.savefig()
         plt.close()
 
