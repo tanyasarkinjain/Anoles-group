@@ -5,11 +5,15 @@ scales are overall uniform but in some places difficult to count by hand. It can
 The main code is in [Anoles_counting_scales.ipynb](https://github.com/tanyasarkinjain/Anoles-group/blob/master/Anoles_counting_scales.ipynb)
 
 ## Image Requirements
-- Works best for scales and colonies that are not overlapping and instead are distinct
-- Works best for images taken **without** flash
-- Works best for scale and colonies that contrast their background/medium and are paler than the background
-- Works best for scales with overall uniform color
-- It is okay if there is uneven lighting in someplaces (as long as no flash)
+Works best for: 
+- scales and colonies that are not overlapping and instead are distinct
+- images taken **without** flash
+- scale and colonies that contrast their background/medium and are paler than the background
+- scales with overall uniform color
+- skin/background that has uniform color in image
+
+*It is okay if there is uneven lighting in someplaces (as long as no flash)
+
 - Example Image Sets: [Anolis-cristatellus-Imgs](https://github.com/tanyasarkinjain/Anoles-group/tree/master/Anolis_cristatellus_images)    [Anolis-Guanica-County-Imgs](https://github.com/tanyasarkinjain/Anoles-group/tree/master/Anolis_cristatellus_images)   [Imgs-Result-From-Split](https://github.com/tanyasarkinjain/Anoles-group/blob/master/small/small2_01_02.png)
 
 ## Other Requirements
