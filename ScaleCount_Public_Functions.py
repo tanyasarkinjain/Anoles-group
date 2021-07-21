@@ -4,14 +4,17 @@
 # 3.split_count_select
 # 4.display results
 
+# Updates in this version:
+# Fixed error message about clipping
+# Result files are outputted in a new directory (name of new directory passed in as a parameter)
+
 # TODO
-# pdf and csv files should have unique filenames each time so previous files are not overwritten
-# currently displays warning message about clipping input data - this is because the overlay image is some weird format.
-#### I tried fixing this by converting overlay image to np.uint8, and this got rid of the warning message but added weird colored speckles to the overlay image
+# Need to update split_count_select so that it works with updated display function
 # For split_count_select:
-#### Currently adds created subimages to the folder with original images -> need to fix this
+#### Currently adds created subimages to the folder with original images -> need to figure out how to put subimages into output directory instead
 #### Test whether estimated total count is accurate and display the estimated total count somewhere?
-#### Fix titles at the top of the two pdfs outputted by split_count_select
+#### Display selected subimages in the same pdf that displays all subimages
+# add assert statements for all parameters for public functions?
 
 # Explanation of split_count_select()
 # Splits a large image into subimages of equal size (have to give it a number of subimages to split into).
@@ -22,7 +25,7 @@
 # 4. If the score is too high, repeat steps 1-3 on inverted image and see if the score for the inverted image is lower. Keep the one with lower score.
 # Finally, choose the 3 subimages with the lowest (best) scores (printed in a list at the bottom as SELECTED SUBIMAGES)
 
-# Explanation of run_count_on_directory()
+# Explanation of count_scales_directory()
 # Does the same as split_count_select but does not split images and therefore does not choose best subimages.
 
 from ScaleCount_Private_Functions import _count_scales_helper, _calculate_score, _compare_results, _invert, _overlay, _estimate_total_counts   
@@ -108,10 +111,11 @@ def count_scales(img_name, check_invert='auto', noise_thresh=1/7):
             #print("\nDECIDED TO USE INVERTED IMAGE.")
             return inverted_results, inverted_data
 
-def count_scales_directory(dirname):
+def count_scales_directory(dirname, output_name):
     '''Calls count_scales function on every image in the given directory and displays results.
     Resulting images are saved to a pdf and counts are saved to a csv.
     Parameter dirname is the name of the directory.
+    Parameter output_name is the desired name for the output directory.
     Returns a list of dictionaries, which are the first return value when calling count_scales on each image.'''
     directory = os.scandir(dirname)
     results_list = []
@@ -122,7 +126,7 @@ def count_scales_directory(dirname):
         img_filepath = dirname + '/' + img.name
         results, data = count_scales(img_filepath)
         results_list.append(results)
-    display_results(results_list, dirname)
+    display_results(results_list, output_name)
     return results_list
 
 def split_count_select(img_path, num_subimages, num_to_keep):
@@ -173,25 +177,38 @@ def split_count_select(img_path, num_subimages, num_to_keep):
     
     return results_list, best_indices_lst, estimated_total
 
-def display_results(results_list, dirname=None):
+def display_results(results_list, output_name):
     '''Displays original image, inverted image (if applicable), thresholded image with noise,
     noise-removed image with scales labeled, and overlaid image.
-    Displayed images are saved to a pdf file, and a table with image names and counts are saved to a csv file.
-    Parameter results_list: list of dictionaries containing original, inverted (only if inverted used), blurred, thresholded, labeled_img, img_name.
-    results_list doesn't have to be a list, it may be just a single dictionary.
+    Results are outputted in a directory called output_name (the second parameter).
+    Inside the output directory, displayed images are saved to a pdf file, and a table with image names and counts are saved to a csv file.
+    Parameters:
+        -results_list: list of dictionaries containing original, inverted (only if inverted used), blurred, thresholded, labeled_img, img_name.
+         (results_list doesn't have to be a list, it may be just a single dictionary.)
+        -output_name: desired name for the output directory
         '''
+    assert(isinstance(output_name, str)), 'Output name must be a string.'
+    #add assert statement checking that name only has a-z characters
     if not isinstance(results_list, list):
         results_list = [results_list]
     index = 1
     page_row_count = 0
     total_row_count = 0
-
+    i = 1
+    while os.path.isdir(output_name):
+        if i == 1:
+            output_name = output_name + '(1)'
+        else:
+            output_name = output_name[:-2] + str(i) + ')'
+        i += 1
+    os.mkdir(output_name)
     # Display images in a pdf
-    with PdfPages(r'scale_count_images.pdf') as export_pdf:
+    with PdfPages(output_name + r'/ScaleCount_Result_Images_' + output_name + '.pdf') as export_pdf:
         fig = plt.figure(figsize=(8.5, 11))
-        title = 'Scale Counts'
-        if dirname:
-            title += (' for ' + dirname)
+        title = 'Scale Counts for ' + output_name
+        if len(title) > 50:
+                lines = [title[i:i+50] for i in range(0, len(title), 50)]
+                title = '\n'.join(lines)
         fig.suptitle(title, fontsize=14, fontweight='bold')
         for results_dict in results_list:
             count = results_dict['count']
@@ -238,4 +255,4 @@ def display_results(results_list, dirname=None):
     table['Image Names'] = img_names
     table['Count'] = counts
     display(table)
-    table.to_csv(r'scale_count_table.csv', index = False)
+    table.to_csv(output_name + r'/ScaleCount_Table_' + output_name + '.csv', index = False)

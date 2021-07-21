@@ -90,7 +90,8 @@ def _choose_blocksize_and_iterations(otsu_img):
     distance_std, avg_shortest_dis = _avg_shortest_distance(centroids)
     
     # Determine blocksize and iterations
-    block_size = int(2*(np.sqrt((avg_scale_size/(np.pi))) + avg_shortest_dis/2))
+    block_size = int(2*np.sqrt(avg_scale_size/(np.pi)) + avg_shortest_dis)
+    ####formula is same as before, just distributed the 2 to make it look cleaner
     iterations = 0
     if block_size % 2 == 0: # Blocksize must be an odd number
         block_size = block_size + 1
@@ -198,8 +199,8 @@ def _overlay(bw_img, color_mask, w1=0.2, w2=0.95):
     a = cv2.cvtColor(bw_img, cv2.COLOR_GRAY2RGB)
     a -= np.min(a)
     a = a/np.max(a)*255
-    a = np.clip(a, a_min=0, a_max=255).astype(int)
-    b = np.clip(color_mask, a_min=0, a_max=255).astype(int)
+    a = np.clip(a, a_min=0, a_max=255).astype(np.uint8)
+    b = np.clip(color_mask, a_min=0, a_max=255).astype(np.uint8)
     c = cv2.addWeighted(b,w1,a,w2,0)
     return c
 
