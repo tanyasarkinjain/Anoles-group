@@ -330,4 +330,21 @@ def _count_scales_helper(img, noise_thresh):
 
 
 def _estimate_total_counts(all_counts, best_indices, sub_img):
+    '''Used by split_count_select; Estimates total scale count by taking the average count across selected subimages and multiplying by total number of subimages.'''
     return (sum([all_counts[i] for i in best_indices]) * sub_img / len(best_indices))    
+
+def _wrap_title(title, length):
+    '''Used to split a string into multiple lines if it is too long.
+        Parameter title is the string.
+        Parameter length is the maximum number of characters per line.'''
+    if len(title) > length:
+        lines = [title[i:i+length] for i in range(0, len(title), length)]
+        return '\n'.join(lines)
+    return title
+
+def _last_part_of_path(img_path):
+    '''Takes a string and removes everything to the left of the rightmost '/' character.'''
+    slash_index = img_path.rfind('/')
+    if slash_index > 0:
+        return img_path[slash_index + 1:]
+    return img_path

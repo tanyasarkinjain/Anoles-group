@@ -4,15 +4,26 @@ from ScaleCount_Public_Functions import count_scales, count_scales_directory, sp
 
 # SINGLE IMAGES:
 #results, data = count_scales('Arctos_Database_images/UCM_8774_Sceloporus_dugesii_ventral_02.png')
-#display_results(results, 'Sceloporus')
+#display_results(results, 'ARCTOS_SCELOPORUS_RESULTS')
+
 
 # WHOLE DIRECTORY:
-count_scales_directory('Guanica_County_images', 'Guanica_Results')
-#count_scales_directory('Fish_scales', 'Fish_Results')
-#count_scales_directory('sample_bacteria_colonies', 'Bacteria_results')
-#count_scales_directory('Anolis_cristatellus_images', 'Anolis_results')
-#count_scales_directory('Sea_Bass_Kaggle', 'Sea_bass_results')
+#results = count_scales_directory('Guanica_County_images')
+#display_results(results, 'GUANICA_RESULTS')
+
+#results = count_scales_directory('Fish_scales') #this is the folder of multicolored scales we thought was fish but actually sceloporus lizards
+#display_results(results, 'SCELOPORUS_RESULTS')
+
+#results = count_scales_directory('sample_bacteria_colonies')
+#display_results(results, 'BACTERIA_RESULTS')
+
+#results = count_scales_directory('Anolis_cristatellus_images')
+#display_results(results, 'ANOLIS_RESULTS')
+
+#results = count_scales_directory('Sea_Bass_Kaggle')
+#display_results(results, 'SEA_BASS_RESULTS')
+
 
 # SPLIT COUNT SELECT:
-#split_count_select('Arctos_Database_images/UCM_8774_Sceloporus_dugesii_ventral_02.png', 10, 3)
-
+results, best_indices, estimated_total = split_count_select('Arctos_Database_Images/UCM_HERP_12429_Anolis_rodriguezii_ventral.jpeg', 20, 10)
+display_results(results, 'ARCTOS RODRIGUEZII RESULTS', best_indices, estimated_total)
