@@ -5,15 +5,25 @@
 # 4.display results
 
 # Updates in this version:
-# Display_results is now separate; no longer called inside of the other public functions, so other functions no longer output files (they only return values) with one exception:
-# in split_count_select, the subimages that are produced are placed in a new, separate directory.
+# Added selected subimage and estimated total columns to csv for split_count_select - is the formatting ok? Last column is kind of weird
+
+# Previous recent updates:
+# Display_results is a separate function; no longer called inside of the other public functions, so other functions no longer output files (they only return values) with one exception:
+# in split_count_select, the subimages that are produced are placed in a new, separate directory called 'Subimages_From_Splitting_[image name]'.
 # Display_results outputs a single directory (user passes in desired name as a parameter) containing the pdf and csv files, and
 # if displaying results for split_count_select, there is a second pdf file displaying selected subimages and estimated total count
 
 # TODO
-# add assert statements for all parameters in public functions (did most already)
-# default name for output directory? Complicates order of optional parameters in display_results
+# If num_subimages for split is not a nice number, image slicer sometimes splits into more subimages than requested - make note of this in split_count_select? I can't figure out exactly how image slicer decides 
+# Is it ok that display results requires user to enter a name for output directory? Making output name an optional parameter (with default name) would complicate order of optional parameters in display_results and might confuse user
+# How to decide num_subimages and num_to_keep? Use averages? Use whole image count? Let the user decide?
+# Should the folder containing created subimages have an option to be automatically deleted since unnecessary data? One concern would be accidentally deleting something else on the users computer
+# Check which imports are unnecessary and delete them
+# Add citations for sources
+# Add assert statements for parameters in display_results? (already added assert statements for all other public functions)
+# Remove the part in count_scales_directory that has a comment saying to remove
 
+####### Remove since unnecessary? Already have docstrings
 # Explanation of split_count_select()
 # Splits a large image into subimages of equal size (have to give it a number of subimages to split into).
 # For each subimage:
@@ -25,6 +35,7 @@
 
 # Explanation of count_scales_directory()
 # Does the same as split_count_select but does not split images and therefore does not choose best subimages.
+#######
 
 from ScaleCount_Private_Functions import _count_scales_helper, _calculate_score, _compare_results, _invert, _overlay, _estimate_total_counts, _wrap_title, _last_part_of_path   
 import cv2
@@ -56,7 +67,7 @@ def count_scales(img_name, check_invert='auto', noise_thresh=1/7):
             'auto': count both original and inverted images; select better result
             'orig': count original image only
             'invert': count inverted image only
-        -noise_thresh (float or int): noise smaller than this fraction of the average scale area (among the larger half of scales) is removed
+        -noise_thresh (float): noise smaller than this fraction of the average scale area (among the larger half of scales) is removed
     Returns:
         1. A dictionary containing the resulting images from whichever image was better (original or inverted):
             dictionary keys are 'original', 'inverted' (only if inverted used), 'blur', 'with_noise', 'labeled_img', 'count', 'img_name', 'subimage_from_split') 
@@ -64,7 +75,7 @@ def count_scales(img_name, check_invert='auto', noise_thresh=1/7):
     Note: To display results, call display_results function and use the first return value of count_scales as the first parameter
     '''
     assert check_invert == 'auto' or check_invert == 'orig' or check_invert == 'invert', "check_invert must be 'auto', 'orig', or 'invert'"
-    assert isinstance(noise_thresh, float) or isinstance(noise_thresh, int)
+    assert isinstance(noise_thresh, float) or isinstance(noise_thresh, int), 'Noise_thresh must be a float, usually a fraction less than 1.'
     orig_img = cv2.imread(img_name)
     assert isinstance(orig_img, np.ndarray), 'Invalid image name.'
     orig_img = cv2.cvtColor(orig_img, cv2.COLOR_BGR2GRAY)
@@ -114,6 +125,7 @@ def count_scales_directory(dirname):
     Parameter dirname (string) is the name of the directory.
     Parameter output_name (string) is the desired name for the output directory.
     Returns a list of dictionaries (each dictionary is the first return value from calling count_scales on each image)'''
+    assert os.path.isdir(dirname), 'Invalid directory name.'
     directory = os.scandir(dirname)
     results_list = []
     for img in directory:
@@ -138,6 +150,8 @@ def split_count_select(img_path, num_subimages, num_to_keep):
         2. List of the indices of the selected subimages
         3. Estimated total scale count for original image based on selected subimages
     Note: To display results, call display_results function and use the return values from split_count_select as parameters'''
+    assert isinstance(num_subimages, int), 'num_subimages must be an integer.'
+    assert isinstance(num_to_keep, int), 'num_to_keep must be an integer.'
     assert(num_to_keep <= num_subimages), 'num_to_keep cannot be greater than num_subimages'
     img = cv2.imread(img_path)
     assert isinstance(img, np.ndarray), 'Invalid image name.'
@@ -258,8 +272,12 @@ def display_results(results_list, output_name, best_indices_lst=None, estimated_
     counts = [d['count'] for d in results_list]
     img_names = [_last_part_of_path(d['img_name']) for d in results_list]
     table=pandas.DataFrame()
-    table['Image Names'] = img_names
-    table['Count'] = counts
+    first_col = 'Subimage Name' if split else 'Image Name'
+    table[first_col] = img_names
+    table['Scale Count'] = counts
+    if split:
+        table['Subimage Selected?'] = ['Yes' if i in best_indices_lst else 'No' for i in range(len(results_list))]
+        table['Estimated Total Scale Count'] = [estimated_total] + ['-']*(len(results_list)-1)
     display(table)
     table_prefix = r'/Subimage_Counts_Table_' if split else r'/ScaleCounts_Table_'
     table.to_csv(output_name + table_prefix + output_name + '.csv', index = False)
