@@ -4,8 +4,8 @@ import cv2
 import numpy as np
 import sys
 import os
-import warnings # what does this do?
-warnings.filterwarnings('ignore')
+#import warnings # what does this do?
+#warnings.filterwarnings('ignore')
 import statistics
 # from scipy.spatial.distance import pdist as pdist
 
