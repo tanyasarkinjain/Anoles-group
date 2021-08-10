@@ -1,41 +1,5 @@
-# Public Functions:
-# 1.count_scales
-# 2.count_scales_directory
-# 3.split_count_select
-# 4.display results
-
-# Updates in this version:
-# Added selected subimage and estimated total columns to csv for split_count_select - is the formatting ok? Last column is kind of weird
-
-# Previous recent updates:
-# Display_results is a separate function; no longer called inside of the other public functions, so other functions no longer output files (they only return values) with one exception:
-# in split_count_select, the subimages that are produced are placed in a new, separate directory called 'Subimages_From_Splitting_[image name]'.
-# Display_results outputs a single directory (user passes in desired name as a parameter) containing the pdf and csv files, and
-# if displaying results for split_count_select, there is a second pdf file displaying selected subimages and estimated total count
-
 # TODO
-# If num_subimages for split is not a nice number, image slicer sometimes splits into more subimages than requested - make note of this in split_count_select? I can't figure out exactly how image slicer decides 
-# Is it ok that display results requires user to enter a name for output directory? Making output name an optional parameter (with default name) would complicate order of optional parameters in display_results and might confuse user
-# How to decide num_subimages and num_to_keep? Use averages? Use whole image count? Let the user decide?
-# Should the folder containing created subimages have an option to be automatically deleted since unnecessary data? One concern would be accidentally deleting something else on the users computer
-# Check which imports are unnecessary and delete them
-# Add citations for sources
-# Add assert statements for parameters in display_results? (already added assert statements for all other public functions)
 # Remove the part in count_scales_directory that has a comment saying to remove
-
-####### Remove since unnecessary? Already have docstrings
-# Explanation of split_count_select()
-# Splits a large image into subimages of equal size (have to give it a number of subimages to split into).
-# For each subimage:
-# 1. Performs Otsu threshold and uses results to determine blocksize and iterations.
-# 2. Performs adaptive thresholding using selected blocksize and iterations. Removes noise.
-# 3. Calculates a score for the result based on scale size variation and uniformity of distribution. The lower the score, the better.
-# 4. If the score is too high, repeat steps 1-3 on inverted image and see if the score for the inverted image is lower. Keep the one with lower score.
-# Finally, choose the 3 subimages with the lowest (best) scores (printed in a list at the bottom as SELECTED SUBIMAGES)
-
-# Explanation of count_scales_directory()
-# Does the same as split_count_select but does not split images and therefore does not choose best subimages.
-#######
 
 from ScaleCount_Private_Functions import _count_scales_helper, _calculate_score, _compare_results, _invert, _overlay, _estimate_total_counts, _wrap_title, _last_part_of_path   
 import cv2
@@ -44,14 +8,10 @@ import matplotlib as mpl
 from matplotlib import pyplot as plt
 import sys
 import os
-import warnings
-warnings.filterwarnings('ignore')
-#get_ipython().run_line_magic('matplotlib', 'inline')
+#import warnings
+#warnings.filterwarnings('ignore')
 import matplotlib.pyplot as plt
-#mpl.rcParams['figure.dpi'] = 120
-#from IPython.display import set_matplotlib_formats
 from IPython.display import display
-#set_matplotlib_formats('retina')
 import pandas
 import image_slicer
 from matplotlib.backends.backend_pdf import PdfPages
@@ -144,6 +104,9 @@ def split_count_select(img_path, num_subimages, num_to_keep):
     Parameters:
         -img_path (string): filepath for original image
         -num_subimages (int): number of subimages to split the image into
+            Note: according to documentation, image_slicer will split the image into a
+            number of images greater than or equal to num_subimages, so long as the image is split into equal parts
+            https://readthedocs.org/projects/image-slicer/downloads/pdf/latest/
         -num_to_keep (int): number of subimages to keep
     Returns:
         1. List of dictionaries (each dictionary is the first return value from calling count_scales on each subimage.
@@ -190,7 +153,7 @@ def split_count_select(img_path, num_subimages, num_to_keep):
     estimated_total = _estimate_total_counts(all_counts, best_indices_lst, num_subimages)
     return results_list, best_indices_lst, estimated_total
 
-def display_results(results_list, output_name, best_indices_lst=None, estimated_total=None):
+def display_results(results_list, output_name="ScaleCount_results_display", best_indices_lst=None, estimated_total=None):
     '''Outputs a new directory called output_name, containing the following files:
         1. A pdf called Results_Images_[output_name].pdf (or if displaying for split_count_select, pdf is called Subimage_Counts_[output_name].pdf.
            The pdf displays, for every image or subimage, the following:
@@ -310,3 +273,4 @@ def display_results(results_list, output_name, best_indices_lst=None, estimated_
                     if i < num_selected - 1:
                         fig = plt.figure(figsize=(8.5, 11))
                         plot_index = 1
+
