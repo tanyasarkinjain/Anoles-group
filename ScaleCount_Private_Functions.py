@@ -4,10 +4,7 @@ import cv2
 import numpy as np
 import sys
 import os
-#import warnings # what does this do?
-#warnings.filterwarnings('ignore')
 import statistics
-# from scipy.spatial.distance import pdist as pdist
 
 
 def _shortest_distance(n, c):
@@ -91,7 +88,6 @@ def _choose_blocksize_and_iterations(otsu_img):
     
     # Determine blocksize and iterations
     block_size = int(2*np.sqrt(avg_scale_size/(np.pi)) + avg_shortest_dis)
-    ####formula is same as before, just distributed the 2 to make it look cleaner
     iterations = 0
     if block_size % 2 == 0: # Blocksize must be an odd number
         block_size = block_size + 1
@@ -302,10 +298,6 @@ def _compare_results(score_list, num_to_keep):
             if score_list[i] < current_worst_score: # if the score is better than the previous scores
                 best_indices.remove(score_list.index(current_worst_score)) # remove the index corresponding to lowest score
                 best_indices.append(i)
-    # if any of the selected images have poor quality, say so
-    #for i in best_indices:
-        #if score_list[i] > 5: # if the score is too high (can change this value)
-            #print("Could not find " + str(num_to_keep) + " subimages that pass the quality check.")
     return best_indices
 
 

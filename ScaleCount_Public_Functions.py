@@ -1,6 +1,3 @@
-# TODO
-# Remove the part in count_scales_directory that has a comment saying to remove
-
 from ScaleCount_Private_Functions import _count_scales_helper, _calculate_score, _compare_results, _invert, _overlay, _estimate_total_counts, _wrap_title, _last_part_of_path   
 import cv2
 import numpy as np
@@ -8,8 +5,6 @@ import matplotlib as mpl
 from matplotlib import pyplot as plt
 import sys
 import os
-#import warnings
-#warnings.filterwarnings('ignore')
 import matplotlib.pyplot as plt
 from IPython.display import display
 import pandas
@@ -89,10 +84,6 @@ def count_scales_directory(dirname):
     directory = os.scandir(dirname)
     results_list = []
     for img in directory:
-        # REMOVE THIS PART LATER
-        if (img.name == '.ipynb_checkpoints' or img.name == '.DS_Store'):
-            continue
-        #########################
         img_filepath = dirname + '/' + img.name
         results, data = count_scales(img_filepath)
         results_list.append(results)
@@ -183,7 +174,6 @@ def display_results(results_list, output_name="ScaleCount_results_display", best
         3. best_indices_lst (list, only required if displaying for split_count_select): second return value from split_count_select
         4. estimated_total (float, only required if displaying for split_count_select): third return value from split_count_select'''
     assert(isinstance(output_name, str)), 'Output name must be a string.'
-    #add assert statement checking that output_name doesn't have any invalid characters such as slashes
     if not isinstance(results_list, list):
         results_list = [results_list]
     # Check if displaying results for split_count_select
