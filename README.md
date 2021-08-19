@@ -2,60 +2,69 @@
 
 Anoles-group (probably changing the name) allows users to count scales easily. The script has methods that can estimate the scales in a large area where 
 scales are overall uniform but in some places difficult to count by hand. It can also count the total scales in smaller good quality images. There are two different methods that can handle for these cases. This should save time and tedium in laboratory settings, providing even results. 
-The main code is in [Anoles_counting_scales.ipynb](https://github.com/tanyasarkinjain/Anoles-group/blob/master/Anoles_counting_scales.ipynb)
+The main code is in [ScaleCount_Public_Functions.py](https://github.com/tanyasarkinjain/ScaleCount/blob/master/ScaleCount_Public_Functions.py)
 
 ## Image Requirements
 Works best for: 
 - scales and colonies that are not overlapping and instead are distinct
 - images taken **without** flash
-- scale and colonies that contrast their background/medium and are paler than the background
+- scales and colonies that contrast their background/medium and are paler than the background
 - scales with overall uniform color
 - skin/background that has uniform color in image
 
 *It is okay if there is uneven lighting in someplaces (as long as no flash)
 
-- Example Image Sets: [Anolis-cristatellus-Imgs](https://github.com/tanyasarkinjain/Anoles-group/tree/master/Anolis_cristatellus_images)    [Anolis-Guanica-County-Imgs](https://github.com/tanyasarkinjain/Anoles-group/tree/master/Anolis_cristatellus_images)   [Imgs-Result-From-Split](https://github.com/tanyasarkinjain/Anoles-group/blob/master/small/small2_01_02.png)
+- Example Image Sets: [Anolis-cristatellus-Imgs](https://github.com/tanyasarkinjain/Anoles-group/tree/master/Anolis_cristatellus_images)    [Anolis-Guanica-County-Imgs](https://github.com/tanyasarkinjain/Anoles-group/tree/master/Anolis_cristatellus_images)
 
 ## Other Requirements
 - numpy
 - matplotlib
 - opencv2
-- os
+- IPython.display
 - pandas
 - image_slicer
 - statistics
 - datascience
 
-## Methods
+## Method Frameworks
 
-### Framework for split_count_select: Green boxes indicate steps unique to split_count_select()
-`split_count_select(img_directory_path, num_subimages, num_to_keep)`
+### count_scales(): 
+`count_scales(img)`
 
-Ideal for images that are large with scales/spots that are unclear in some regions.
-Splits a large image into subimages of equal size (have to give it a number of subimages to split into) and will select the best subimages from which to estimate 
-total scale/colony count.
+Ideal for smaller images that have very clearly defined scales. Image should be good quality and mostly countable by hand.
 
-For each subimage:
 1. Performs Otsu threshold and uses results to determine blocksize and iterations.
 2. Performs adaptive thresholding using selected blocksize and iterations. Removes noise.
 3. Calculates a score for the result based on scale size variation and uniformity of distribution.
 The lower the score, the better.
 4. If the score is too high, repeat steps 1-3 on inverted image and see if the score for the inverted
 image is lower. Keep the one with lower score.
-5. Finally, choose the 3 subimages with the lowest (best) scores (printed in a list at the bottom as SELECTED SUBIMAGES)
+
+<img width="1200" alt="Screenshot 2021-04-19 at 4 48 56 PM" src="https://user-images.githubusercontent.com/67300971/115317476-7cd88980-a130-11eb-86ef-a73bf6bf27ec.png">
+
+### count_scales_directory():
+`count_scales_directory(dirname)`
+
+Runs count_scales on each image in the directory. 
+
+### split_count_select: Green boxes indicate steps unique to split_count_select()
+`split_count_select(img_directory_path, num_subimages, num_to_keep)`
+
+Ideal for images that are large with scales/spots that are unclear in some regions.
+
+For each subimage:
+1. Runs count_scales on each subimage.
+2. Finally, choose the subimages with the best scores.
+3. Estimates total count using the selected subimages.
 
 
 <img width="1191" alt="Screenshot 2021-04-19 at 4 49 13 PM" src="https://user-images.githubusercontent.com/67300971/115316963-49492f80-a12f-11eb-8b73-61ebe6f44eb8.png">
 
-### Framework for run_count_on_directory(): 
-`run_count_on_directory(img_directory_path)`
+### display_results():
+`display_results(results_list, output_name="ScaleCount_results_display", best_indices_lst=None, estimated_total=None)`
 
-Ideal for smaller images that have very clearly defined scales. Image should be good quality and mostly countable by hand.
+Displays pdf showing labeled and counted images. 
 
-For each image:
-Does the same as split_count_select but does not split images and therefore does not choose best segments.
-
-<img width="1200" alt="Screenshot 2021-04-19 at 4 48 56 PM" src="https://user-images.githubusercontent.com/67300971/115317476-7cd88980-a130-11eb-86ef-a73bf6bf27ec.png">
 ___________________________________________________________________________________________________________________
 
 ### Examples (using run_count_on_directory):
