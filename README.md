@@ -1,6 +1,6 @@
-# Anoles-group
+# ScaleCount
 
-Anoles-group (probably changing the name) allows users to count scales easily. The script has methods that can estimate the scales in a large area where 
+ScaleCount allows users to count scales easily. The script has methods that can estimate the scales in a large area where 
 scales are overall uniform but in some places difficult to count by hand. It can also count the total scales in smaller good quality images. There are two different methods that can handle for these cases. This should save time and tedium in laboratory settings, providing even results. 
 The main code is in [ScaleCount_Public_Functions.py](https://github.com/tanyasarkinjain/ScaleCount/blob/master/ScaleCount_Public_Functions.py)
 
@@ -29,7 +29,7 @@ Works best for:
 ## Method Frameworks
 
 ### count_scales(): 
-`count_scales(img)`
+`count_scales(img_name, check_invert='auto', noise_thresh=1/7)`
 
 Ideal for smaller images that have very clearly defined scales. Image should be good quality and mostly countable by hand.
 
@@ -48,7 +48,7 @@ image is lower. Keep the one with lower score.
 Runs count_scales on each image in the directory. 
 
 ### split_count_select: Green boxes indicate steps unique to split_count_select()
-`split_count_select(img_directory_path, num_subimages, num_to_keep)`
+`split_count_select(img_path, num_subimages=0, num_to_keep=0)`
 
 Ideal for images that are large with scales/spots that are unclear in some regions.
 
@@ -67,7 +67,7 @@ Displays pdf showing labeled and counted images.
 
 ___________________________________________________________________________________________________________________
 
-### Examples (using run_count_on_directory):
+### Examples (using count_scales):
 
 <img width="1215" alt="Screenshot 2021-04-16 at 12 48 31 AM" src="https://user-images.githubusercontent.com/67300971/115346260-cfcc3400-a164-11eb-88c6-505d951f1f74.png">
 
