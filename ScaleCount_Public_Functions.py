@@ -23,11 +23,11 @@ def count_scales(img_name, check_invert='auto', noise_thresh=1/7):
     Finally, compares results from original vs. inverted image and returns better results.
     Parameters:
         -img_name (string) is the filepath of the image to be analyzed.
-        -check_invert (string) can have values 'auto', 'orig', or 'invert'.
+        -check_invert (string, optional) can have values 'auto', 'orig', or 'invert'.
             'auto': count both original and inverted images; select better result
             'orig': count original image only
             'invert': count inverted image only
-        -noise_thresh (float): noise smaller than this fraction of the average scale area (among the larger half of scales) is removed
+        -noise_thresh (float, optional): noise smaller than this fraction of the average scale area (among the larger half of scales) is removed
     Returns:
         1. A dictionary containing the resulting images from whichever image was better (original or inverted):
             dictionary keys are 'original', 'inverted' (only if inverted used), 'blur', 'with_noise', 'labeled_img', 'count', 'img_name', 'subimage_from_split') 
@@ -98,16 +98,16 @@ def count_scales_directory(dirname):
         results_list.append(results)
     return results_list
 
-def split_count_select(img_path, num_subimages, num_to_keep):
+def split_count_select(img_path, num_subimages=0, num_to_keep=0):
     '''Splits given image into subimages, counts scales in each subimage, and selects best ones to keep.
     All subimages are placed in a new directory called "Subimages_From_Splitting_[original image name]"
     Parameters:
         -img_path (string): filepath for original image
-        -num_subimages (int): number of subimages to split the image into
+        -num_subimages (int, optional): number of subimages to split the image into
             Note: according to documentation, image_slicer will split the image into a
             number of images greater than or equal to num_subimages, so long as the image is split into equal parts
             https://readthedocs.org/projects/image-slicer/downloads/pdf/latest/
-        -num_to_keep (int): number of subimages to keep
+        -num_to_keep (int, optional): number of subimages to keep
     Returns:
         1. List of dictionaries (each dictionary is the first return value from calling count_scales on each subimage.
         2. List of the indices of the selected subimages
@@ -118,6 +118,21 @@ def split_count_select(img_path, num_subimages, num_to_keep):
     assert(num_to_keep <= num_subimages), 'num_to_keep cannot be greater than num_subimages'
     img = cv2.imread(img_path)
     assert isinstance(img, np.ndarray), 'Invalid image name.'
+
+    # Determine num_subimages and num_to_keep
+    if num_subimages == 0:
+        results, data = count_scales(img_path)
+        count = results['count']
+        if count < 200:
+            num_subimages = 12
+            num_to_keep = 3
+        elif count < 500:
+            num_subimages = count//20
+            num_to_keep = num_subimages//3
+        else:
+            num_subimages = 30
+            num_to_keep = 10
+            
     img_size = img.shape
     # Split image into subimages
     tiles = image_slicer.slice(img_path, num_subimages, save=False)
@@ -164,7 +179,7 @@ def display_results(results_list, output_name="ScaleCount_results_display", best
     Parameters:
         1. results_list (list): list of dictionaries, from the first return value of count_scales, count_scales_directory, or split_count_select
          (results_list doesn't have to be a list, it may be just a single dictionary.)
-        2. output_name (string): desired name for the output directory
+        2. output_name (string, optional): desired name for the output directory
         3. best_indices_lst (list, only required if displaying for split_count_select): second return value from split_count_select
         4. estimated_total (float, only required if displaying for split_count_select): third return value from split_count_select'''
     assert(isinstance(output_name, str)), 'Output name must be a string.'
