@@ -2,7 +2,7 @@
 
 ScaleCount allows users to count scales easily. The script has methods that can estimate the scales in a large area where 
 scales are overall uniform but in some places difficult to count by hand. It can also count the total scales in smaller good quality images. There are two different methods that can handle for these cases. This should save time and tedium in laboratory settings, providing even results. 
-The main code is in [ScaleCount_Public_Functions.py](https://github.com/tanyasarkinjain/ScaleCount/blob/master/ScaleCount_Public_Functions.py)
+The main code is in [ScaleCount_Public_Functions.py](https://github.com/tanyasarkinjain/ScaleCount/blob/master/src/ScaleCount_Public_Functions.py)
 
 ## Image Requirements
 Works best for: 
