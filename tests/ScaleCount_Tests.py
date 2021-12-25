@@ -1,6 +1,6 @@
 # SAMPLE TESTS
-
-from ScaleCount_Public_Functions import count_scales, count_scales_directory, split_count_select, display_results
+import Scale_Counter
+from Scale_Counter.ScaleCount_Public_Functions import *
 
 # SINGLE IMAGE:
 results, data = count_scales('UCM_HERP_12429_Anolis_rodriguezii_ventral.jpeg')
