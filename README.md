@@ -14,7 +14,7 @@ Works best for:
 
 *It is okay if there is uneven lighting in someplaces (as long as no flash)
 
-- Example Image Sets: [Anolis-cristatellus-Imgs](https://github.com/tanyasarkinjain/Anoles-group/tree/master/Anolis_cristatellus_images)    [Anolis-Guanica-County-Imgs](https://github.com/tanyasarkinjain/Anoles-group/tree/master/Anolis_cristatellus_images)
+- Example Image Sets: [Anolis-cristatellus-Imgs](https://github.com/tanyasarkinjain/ScaleCount/tree/master/test_images/Anolis_cristatellus_images)    [Anolis-Guanica-County-Imgs](https://github.com/tanyasarkinjain/ScaleCount/tree/master/test_images/Guanica_County_images)
 
 ## Other Requirements
 - numpy
