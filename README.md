@@ -1,6 +1,6 @@
-# ScaleCount
+# ScaleCounter
 
-ScaleCount allows users to count scales easily. The script has methods that can estimate the scales in a large area where 
+ScaleCounter allows users to count scales easily. The script has methods that can estimate the scales in a large area where 
 scales are overall uniform but in some places difficult to count by hand. It can also count the total scales in smaller good quality images. There are two different methods that can handle for these cases. This should save time and tedium in laboratory settings, providing even results. 
 The main code is in [ScaleCount_Public_Functions.py](https://github.com/tanyasarkinjain/ScaleCount/blob/master/src/ScaleCount_Public_Functions.py)
 
@@ -25,6 +25,30 @@ Works best for:
 - image_slicer
 - statistics
 - datascience
+
+## Using the Package
+
+`import ScaleCounter`
+
+`from ScaleCounter.ScaleCount_Public_Functions import *`
+
+### Single Image:
+
+`results, data = count_scales('image_name') #counts scales and returns two python dictionaries`
+
+`display_results(results, 'output_name') #produces folder called output_name, containing pdf and csv files displaying results`
+
+### Whole Directory:
+
+`results = count_scales_directory('directory_name')`
+
+`display_results(results, 'output_name')`
+
+### Split Count Select:
+
+`results, best_indices, estimated_total = split_count_select('image_name')`
+
+`display_results(results, 'output_name', best_indices_lst=best_indices, estimated_total=estimated_total)`
 
 ## Method Frameworks
 
